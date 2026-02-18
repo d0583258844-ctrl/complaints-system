@@ -14,7 +14,7 @@ export const getComplaints = async (req, res) => {
 export const createComplaint = async (req, res) => {
   try {
     const { category, message } = req.body;
-    if(!(category == "food" || category == "equipment" || category == "orders")){
+    if(!(category == "Food" || category == "Equipment" || category == "Commands" || category == "Other")){
       return res.status(400).json({error: "category is not allwod"})
      }
       if (!category || !message) {
@@ -26,5 +26,19 @@ export const createComplaint = async (req, res) => {
     res
       .status(err.status || 500)
       .send({ error: err, msg: err.message || "Internal Server Error" });
+  }
+};
+
+
+export const adminLogin = async (req, res) => {
+  const { password } = req.body;
+
+  console.log("Login attempt with password:", password);
+  console.log("Expected password from ENV:", process.env.SECRET_KEY);
+
+  if (password === process.env.SECRET_KEY) {
+    return res.json({ token: "simple-admin-token-123" });
+  } else {
+    return res.status(401).json({ message: "Invalid Password" });
   }
 };
